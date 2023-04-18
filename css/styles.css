@@ -1,0 +1,31 @@
+body {
+  font-size: 14px;
+}
+
+.no-highlight {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+a:hover,
+a:visited,
+a:link,
+a:active {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.link-favs {
+  width: 15px !important;
+  height: 15px !important;
+}
+
+#session-logs {
+  height: 40vh;
+  max-height: 40vh;
+  overflow-y: scroll;
+}

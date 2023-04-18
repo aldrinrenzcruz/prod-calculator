@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Editorial tools">
+  <meta name="author" content="Aldrin Cruz">
+  <title>Prod Calculator</title>
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="icons/bootstrap/$bootstrap-icons.css">
+  <script src="js/jquery-3.6.1.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap">
+
+  <noscript>
+    <meta http-equiv="refresh" content="0; URL=index.html">
+  </noscript>
+
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="row gx-5">
+
+      <section class="col-lg-1 my-5"></section>
+
+      <section class="col-lg-6 my-5">
+
+        <div class="float-end no-highlight">
+          <a class="text-secondary" href="#"><small>Kanban</small></a>
+          &nbsp;<div class="vr"></div>&nbsp;
+          <a class="text-secondary" href="#"><small>Tableau</small></a>
+        </div>
+
+        <h6 class="no-highlight">Productivity Calculator</h6>
+
+        <div class="form-floating no-highlight mt-5">
+          <select class="form-select rounded-0" id="user-task-option">
+            <option value="auto_update_correction">Auto Update Correction</option>
+            <option value="auto_update_validation">Auto Update Validation</option>
+            <option value="charting_admin_code">Charting (Admin Code)</option>
+            <option value="charting_court_rules">Charting (Court Rules)</option>
+            <option value="cite_corrections">Cite Corrections</option>
+            <option value="editor_charting">Editor Charting</option>
+            <option value="gen_edit_admin_code">General Edit (Admin Code)</option>
+            <option value="gen_edit_court_rules">General Edit (Court Rules)</option>
+            <option value="gen_edit_statutes">General Edit (Statutes)</option>
+            <option value="handle_auto_update_exception">Handle Auto Update Exception</option>
+            <option value="handle_charting_search_exception">Handle Charting / Search Exception</option>
+            <option value="harmonization">Harmonization</option>
+            <option value="icce_exceptions">ICCE Exception</option>
+            <option value="noted_under_review">Noted Under Review</option>
+            <option value="notes_placement">Notes Placement</option>
+            <option value="notes_writing">Notes Writing</option>
+            <option value="pdu_review">PDU Review</option>
+            <option value="print_proof_corrections_compare">Print Proof Corrections Compare</option>
+            <option value="print_proof_review">Print Proof Review</option>
+            <option value="rescheming">Rescheming</option>
+            <option value="review_engrossed_content">Review Engrossed Content</option>
+          </select>
+          <label for="user-task-option">Task Name</label>
+        </div>
+
+        <div class="row g-2 mt-2 no-highlight">
+          <div class="col-md">
+            <div class="form-floating">
+              <input class="form-control rounded-0" id="task-count-input" type="number">
+              <label for="task-count-input">Task Count</label>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="form-floating">
+              <input class="form-control rounded-0" id="date-picker" type="date">
+              <label for="date-picker">Date Completed</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-grid gap-2 col-12 mx-auto my-4">
+          <button class="btn btn-primary rounded-0" id="save-button" onclick="updateProdPoints();" type="button"><i class="bi bi-plus-lg"></i> Save</button>
+        </div>
+
+        <hr>
+
+        <div class="float-end no-highlight">
+          <button class="btn btn-sm btn-outline-danger me-1 rounded-0" data-bs-toggle="modal" data-bs-target="#reset-prompt-modal"><i class="bi bi-archive"></i> Reset Data</button>
+          <button class="btn btn-sm btn-outline-danger rounded-0" id="undo-button" data-bs-toggle="modal" data-bs-target="#undo-prompt-modal" title="Undo last added task"><i class="bi bi-arrow-counterclockwise"></i> Undo</button>
+        </div>
+
+        <h6><small>History</small></h6>
+        <div class="output mt-4">
+          <div id="session-logs"></div>
+        </div>
+
+      </section>
+
+      <section class="col-lg-5 my-5">
+
+        <table class="table table-bordered border-dark table-sm text-center">
+          <thead>
+            <tr>
+              <th class="text-bg-info">Total Production Points</th>
+            </tr>
+            <tr>
+              <th id="total-prod-points-ui" scope="col">0</th>
+            </tr>
+          </thead>
+        </table>
+
+        <table class="table table-bordered border-dark table-sm text-center">
+          <thead>
+            <tr>
+              <th class="text-bg-dark" colspan="4">GRADE</th>
+            </tr>
+            <tr>
+              <th id="grade-1-heading" scope="col">1</th>
+              <th id="grade-2-heading" scope="col">2</th>
+              <th id="grade-3-heading" scope="col">3</th>
+              <th id="grade-4-heading" scope="col">4</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="grade-1">901-1100</td>
+              <td id="grade-2">820-900</td>
+              <td id="grade-3">710-819</td>
+              <td id="grade-4">0-709</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <span id="prod-table-data"></span>
+      </section>
+    </div>
+
+    <section class="modal fade no-highlight" id="reset-prompt-modal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content rounded-0">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5"><small>Confirm Reset</small></h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">Are you sure you want to reset all data?</div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-sm btn-primary" onclick="resetProdPoints();" data-bs-dismiss="modal">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="modal fade no-highlight" id="undo-prompt-modal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content rounded-0">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5"><small>Confirm Undo</small></h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">Are you sure you want to undo the last added task?</div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-sm btn-primary" onclick="undoTask();" data-bs-dismiss="modal">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+
+</html>
